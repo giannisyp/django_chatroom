@@ -1,11 +1,19 @@
-FROM python:3.9.7
+FROM python:3.9-slim
 
-WORKDIR /usr/src/app
+# Set the working directory in the container
+WORKDIR /app
 
-COPY requirements.txt ./
+# Copy the requirements file into the container
+COPY requirements.txt /app/
 
+# Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+# Copy the rest of the application code into the container
+COPY . /app/
 
-CMD ["uvicorn", "app.main:app","--host","0.0.0.0","--port", "8000"]
+# Expose the port the app runs on
+EXPOSE 8000
+
+# Set the default command to run the Django development server
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
